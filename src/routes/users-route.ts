@@ -18,47 +18,57 @@ export const usersRoute = Router({})
 const postValidationUsers = () => [loginValidationUsers, passwordValidationUsers, emailValidationUsers]
 
 
-usersRoute.get('/', authMiddleware,async(req: RequestWithQuery<QueryUsersInputModal>, res: Response)=> {
+class UsersController {
 
-const users = await userQueryRepository.getUsers(req.query)
+    async getUsers(req: RequestWithQuery<QueryUsersInputModal>, res: Response) {
+        const users = await userQueryRepository.getUsers(req.query)
 
-     res.status(STATUS_CODE.SUCCESS_200).send(users)
+        res.status(STATUS_CODE.SUCCESS_200).send(users)
+    }
 
-})
+    async createUser(req: RequestWithBody<CreateUserModel>, res: Response) {
+        try {
 
+            const newUser = await usersService.createUser(req.body)
 
+            if (newUser) {
 
-usersRoute.post('/', authMiddleware, postValidationUsers(), errorValidationBlogs, async (req: RequestWithBody<CreateUserModel>, res: Response) => {
+                res.status(STATUS_CODE.CREATED_201).send(newUser)
 
-    try{
-
-        const newUser = await usersService.createUser(req.body)
-
-        if (newUser) {
-
-            res.status(STATUS_CODE.CREATED_201).send(newUser)
-
-        } else {
-            res.sendStatus(STATUS_CODE.BAD_REQUEST_400)
+            } else {
+                res.sendStatus(STATUS_CODE.BAD_REQUEST_400)
+            }
+        } catch (error) {
+            console.log('users-route.ts post /users' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
         }
-    } catch (error) {
-        console.log('users-route.ts post /users' + error)
-        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 
+    async deleteCorrectUser(req: RequestWithParams<IdUserModel>, res: Response) {
+        const isUserDelete = await usersService.deleteUserById(req.params.id)
 
-
-})
-
-
-usersRoute.delete('/:id', authMiddleware,async(req: RequestWithParams<IdUserModel>, res: Response) => {
-
-    const isUserDelete = await usersService.deleteUserById(req.params.id)
-
-    if(isUserDelete){
-        return res.sendStatus(STATUS_CODE.NO_CONTENT_204)
-    } else {
-        return res.sendStatus(STATUS_CODE.NOT_FOUND_404)
+        if (isUserDelete) {
+            return res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+        } else {
+            return res.sendStatus(STATUS_CODE.NOT_FOUND_404)
+        }
     }
+}
 
-})
+const usersController = new UsersController()
+
+
+usersRoute.get('/',
+    authMiddleware,
+    usersController.getUsers)
+
+
+usersRoute.post('/',
+    authMiddleware,
+    postValidationUsers(),
+    errorValidationBlogs,
+    usersController.createUser)
+
+usersRoute.delete('/:id',
+    authMiddleware,
+    usersController.deleteCorrectUser)
