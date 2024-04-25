@@ -79,4 +79,4 @@ class ClassSecurityDevicesService {
 
 }
 
-export const securityDevicesService = new ClassSecurityDevicesService
+export const securityDevicesService = new ClassSecurityDevicesService()

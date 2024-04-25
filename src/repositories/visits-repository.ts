@@ -16,6 +16,6 @@ class VisitsRepository {
 
 }
 
-export const visitsRepository = new VisitsRepository
+export const visitsRepository = new VisitsRepository()
 
 

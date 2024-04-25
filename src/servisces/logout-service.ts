@@ -19,4 +19,4 @@ class ClassLogoutService {
 
 }
 
-export const logoutService = new ClassLogoutService
+export const logoutService = new ClassLogoutService()

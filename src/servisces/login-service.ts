@@ -48,4 +48,4 @@ class ClassLoginService {
 
 }
 
-export const loginService = new ClassLoginService
+export const loginService = new ClassLoginService()

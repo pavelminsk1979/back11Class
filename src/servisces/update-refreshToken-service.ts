@@ -33,7 +33,7 @@ class ClassUpdateRefreshTokenService {
 
 }
 
-export const updateRefreshTokenService = new ClassUpdateRefreshTokenService
+export const updateRefreshTokenService = new ClassUpdateRefreshTokenService()
 
 
 

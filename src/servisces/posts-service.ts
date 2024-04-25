@@ -117,4 +117,4 @@ class ClassPostsService {
 }
 
 
-export const postsSevrice = new ClassPostsService
+export const postsSevrice = new ClassPostsService()

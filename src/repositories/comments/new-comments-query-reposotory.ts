@@ -44,4 +44,4 @@ class NewCommentsQueryReposotory {
 }
 
 
-export const newCommentsQueryRepository = new NewCommentsQueryReposotory
+export const newCommentsQueryRepository = new NewCommentsQueryReposotory()

@@ -83,4 +83,4 @@ class CommentsQueryRepository {
 
 
 
-export const commentsQueryRepository = new CommentsQueryRepository
+export const commentsQueryRepository = new CommentsQueryRepository()

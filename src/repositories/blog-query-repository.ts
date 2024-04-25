@@ -91,4 +91,4 @@ class BlogQueryRepository {
     }
 }
 
-export const blogQueryRepository = new BlogQueryRepository
+export const blogQueryRepository = new BlogQueryRepository()

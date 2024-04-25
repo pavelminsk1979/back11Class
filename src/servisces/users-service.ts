@@ -48,7 +48,7 @@ class ClassUserService {
 
 }
 
-export const usersService = new ClassUserService
+export const usersService = new ClassUserService()
 
 
 

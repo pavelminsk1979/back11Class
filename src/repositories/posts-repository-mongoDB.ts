@@ -41,4 +41,4 @@ class PostPepository {
 }
 
 
-export const postsRepository = new PostPepository
+export const postsRepository = new PostPepository()

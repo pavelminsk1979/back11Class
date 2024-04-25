@@ -60,4 +60,4 @@ class ClassTokenJwtService {
 
 }
 
-export const tokenJwtServise = new ClassTokenJwtService
+export const tokenJwtServise = new ClassTokenJwtService()

@@ -45,4 +45,4 @@ class ClassComentsService {
     }
 }
 
-export const commentsSevrice = new ClassComentsService
+export const commentsSevrice = new ClassComentsService()

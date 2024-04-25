@@ -79,6 +79,6 @@ class UserQueryRepository {
     }
 }
 
-export const userQueryRepository = new UserQueryRepository
+export const userQueryRepository = new UserQueryRepository()
 
 

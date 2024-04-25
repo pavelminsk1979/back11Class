@@ -29,4 +29,4 @@ class LikesCommentsRepository {
 }
 
 
-export const likesCommentsRepository = new LikesCommentsRepository
+export const likesCommentsRepository = new LikesCommentsRepository()

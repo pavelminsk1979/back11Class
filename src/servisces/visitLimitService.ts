@@ -24,5 +24,5 @@ class ClassVisitLimitService {
 
 }
 
-export const visitLimitService = new ClassVisitLimitService
+export const visitLimitService = new ClassVisitLimitService()
 

@@ -39,4 +39,4 @@ class  BlogsRepository {
 }
 
 
-export const blogsRepository = new BlogsRepository
+export const blogsRepository = new BlogsRepository()

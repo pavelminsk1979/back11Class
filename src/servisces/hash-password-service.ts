@@ -14,4 +14,4 @@ class ClassHashPasswordService {
 
 }
 
-export const hashPasswordService = new ClassHashPasswordService
+export const hashPasswordService = new ClassHashPasswordService()

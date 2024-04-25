@@ -77,4 +77,4 @@ class VideosRepository {
     }
 }
 
-export const videosRepository = new VideosRepository
+export const videosRepository = new VideosRepository()

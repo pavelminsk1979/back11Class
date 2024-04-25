@@ -84,5 +84,5 @@ class ClassBlogsServise {
 
 }
 
-export const blogsSevrice = new ClassBlogsServise
+export const blogsSevrice = new ClassBlogsServise()
 
