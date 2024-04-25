@@ -3,7 +3,7 @@ import {User} from "../../allTypes/userTypes";
 import {ObjectId} from "mongodb";
 
 
-export const usersRepository = {
+class UsersRepository {
 
 
     async createUser(newUser: User) {
@@ -11,24 +11,24 @@ export const usersRepository = {
         const result = await usersModel.create(newUser)
 
         return result
-    },
+    }
 
     async deleteUserById(id: string): Promise<boolean> {
 
         const result = await usersModel.deleteOne({_id: new ObjectId(id)})
 
         return !!result.deletedCount
-    },
+    }
 
     async findUserByConfirmationCode(code: string) {
         return await usersModel.findOne({
             "emailConfirmation.confirmationCode": code
         })
-    },
+    }
 
     async findUserByEmail(email: string) {
         return await usersModel.findOne({email})
-    },
+    }
 
     async updateFlagIsConfirmedForUser(code: string) {
 
@@ -37,7 +37,7 @@ export const usersRepository = {
         })
 
         return !!result.matchedCount
-    },
+    }
 
 
     async updateCodeConfirmationAndExpirationDate(email: string, newCode: string, newDate: Date) {
@@ -47,7 +47,7 @@ export const usersRepository = {
         })
 
         return !!result.matchedCount
-    },
+    }
 
 
     async findUserWithAllPropetiesById(id: string) {
@@ -55,7 +55,7 @@ export const usersRepository = {
         if (!user) return null
 
         return user
-    },
+    }
 
     async updateBlackListRefreshTokenForUser(email: string, token: string) {
 
@@ -63,7 +63,7 @@ export const usersRepository = {
             {$push: {blackListRefreshToken: token}})
 
         return !!result.matchedCount
-    },
+    }
 
 
     async updatePasswordHash(newPasswordHash:string, code:string){
@@ -76,3 +76,5 @@ export const usersRepository = {
     }
 
 }
+
+export const usersRepository = new UsersRepository

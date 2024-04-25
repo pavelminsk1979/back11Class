@@ -3,14 +3,14 @@ import {settings} from "../common/settings";
 import {ContentRefreshToken} from "../allTypes/usersDevicesTypes";
 
 
-export const tokenJwtServise = {
+class ClassTokenJwtService {
 
     async createAccessTokenJwt(userId: string): Promise<string> {
 
         const accessToken = await jwt.sign({userId: userId}, settings.JWT_SECRET_AccessTOKEN, {expiresIn: settings.TIME_LIFE_AccessTOKEN})
 
         return accessToken
-    },
+    }
 
 
     async createRefreshTokenJwt(deviceId: string) {
@@ -31,7 +31,7 @@ export const tokenJwtServise = {
         }, settings.JWT_SECRET_RefreshTOKEN, {expiresIn: timeLifeRefreshToken})
 
         return {refreshToken, issuedAtRefreshToken, expirationRefreshToken}
-    },
+    }
 
 
     async getUserIdByToken(token: string) {
@@ -43,7 +43,7 @@ export const tokenJwtServise = {
             console.log(' FILE token-jwt-service.ts' + error)
             return null
         }
-    },
+    }
 
 
     async getDataFromRefreshToken(refreshToken: string) {
@@ -56,5 +56,8 @@ export const tokenJwtServise = {
             console.log(' FILE token-jwt-service.ts' + error)
             return null
         }
-    },
+    }
+
 }
+
+export const tokenJwtServise = new ClassTokenJwtService

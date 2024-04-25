@@ -4,13 +4,13 @@ import {ObjectId} from "mongodb";
 import {Blog} from "../allTypes/blogTypes";
 
 
-export const blogsRepository = {
+class  BlogsRepository {
 
     async createBlog(newBlog: Blog) {
 
         const result = await blogsModel.create(newBlog)
         return result
-    },
+    }
 
 
     async updateBlog(id: string, requestBodyBlog: CreateAndUpdateBlogModel) {
@@ -27,7 +27,7 @@ export const blogsRepository = {
 
         return !!result.matchedCount
 
-    },
+    }
 
 
     async deleteBlogById(id: string) {
@@ -38,3 +38,5 @@ export const blogsRepository = {
     }
 }
 
+
+export const blogsRepository = new BlogsRepository

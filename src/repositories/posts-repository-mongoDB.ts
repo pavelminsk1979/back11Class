@@ -4,16 +4,14 @@ import {Post} from "../allTypes/postTypes";
 import {ObjectId} from "mongodb";
 
 
-
-
-export const postsRepository = {
+class PostPepository {
 
 
     async createPost(newPost: Post) {
         const result = await postssModel.create(newPost)
         return result
 
-    },
+    }
 
 
     async updatePost(id: string, requestBodyPost: CreateAndUpdatePostModel) {
@@ -30,7 +28,7 @@ export const postsRepository = {
         })
 
         return !!result.matchedCount
-    },
+    }
 
 
     async deletePostById(id: string) {
@@ -41,3 +39,6 @@ export const postsRepository = {
     }
 
 }
+
+
+export const postsRepository = new PostPepository

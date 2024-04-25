@@ -1,21 +1,22 @@
 import {LikesCommentsModel} from "../db/mongoDb";
 import {LikeComment, StatusLike} from "../allTypes/LikesCommentsTypes";
 
-export const LikesCommentsRepository = {
+
+class LikesCommentsRepository {
 
 
     async findDocumentByUserIdAndCommentId(userId: string,commentId: string) {
 
         return LikesCommentsModel.findOne({ userId , commentId});
 
-    },
+    }
 
     async setNewStatusLike(userId: string, commentId: string, statusLike: StatusLike) {
 
         return  LikesCommentsModel.findOneAndUpdate(
             { userId, commentId},
             {$set: {statusLike}});
-        },
+    }
 
 
     async addNewDocumentForLikeCommentCollention(newDocumentForCollectionLikesComments:LikeComment) {
@@ -26,3 +27,6 @@ export const LikesCommentsRepository = {
 
 
 }
+
+
+export const likesCommentsRepository = new LikesCommentsRepository

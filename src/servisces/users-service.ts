@@ -5,7 +5,7 @@ import {hashPasswordService} from "./hash-password-service";
 import {v4 as randomCode} from "uuid";
 
 
-export const usersService = {
+class ClassUserService {
 
     async createUser(requestBodyUser: CreateUserModel):Promise<OutputUser|null> {
 
@@ -29,25 +29,26 @@ export const usersService = {
 
         const result= await usersRepository.createUser(newUser)
 
-       // const idNewUser = result.insertedId.toString()
+        // const idNewUser = result.insertedId.toString()
 
-            const idNewUser = result._id.toString()
+        const idNewUser = result._id.toString()
         //const idNewUser = result[0].id
 
         if (!idNewUser) return null
 
-const user =  await userQueryRepository.findUserById(idNewUser)
+        const user =  await userQueryRepository.findUserById(idNewUser)
 
         return user
 
-    },
+    }
 
     async deleteUserById(id:string):Promise<boolean>{
         return usersRepository.deleteUserById(id)
-    },
-
+    }
 
 }
+
+export const usersService = new ClassUserService
 
 
 

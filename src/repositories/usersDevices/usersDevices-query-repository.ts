@@ -2,7 +2,7 @@ import { usersDevicesModel} from "../../db/mongoDb";
 import {deviceMaper} from "../../mapers/deviceMaper";
 
 
-export const usersDevicesQueryRepository = {
+class UsersDevicesQueryRepository {
 
     async getDevices(userId: string) {
 
@@ -14,3 +14,5 @@ export const usersDevicesQueryRepository = {
 
 
 }
+
+export const usersDevicesQueryRepository = new UsersDevicesQueryRepository

@@ -5,9 +5,7 @@ import { SortDataGetCoomentsForCorrectPost} from "../../allTypes/commentTypes";
 import {commentsMaperWithInfoLikeComment} from "../../mapers/commentsMaperWithInfoLikeComment";
 
 
-
-
-export const commentsQueryRepository = {
+class CommentsQueryRepository {
 
     async findCommentById(id: string) {
 
@@ -16,7 +14,7 @@ export const commentsQueryRepository = {
         if(!comment) return null
 
         return commentMaper(comment)
-    },
+    }
 
 
     async getCommentsForCorrectPost(
@@ -49,7 +47,7 @@ export const commentsQueryRepository = {
         //arrayDocumentsComments - это массив коментариев для одного
         // корректного поста и в каждом документе
         //уникальная _id new ObjectId-это айдишка коментария
-            //получу массив айдишек  - [ '6628d4bcb6ea72bda3f934e8', '6628d4bcb6ea72bda3f934d9' ]
+        //получу массив айдишек  - [ '6628d4bcb6ea72bda3f934e8', '6628d4bcb6ea72bda3f934d9' ]
 
         const arrayIdComents = arrayDocumentsComments.map(e=>e._id.toString())
 
@@ -61,7 +59,7 @@ export const commentsQueryRepository = {
          айдишками из  массиве arrayIdComents*/
         const arrayDocumentsFromLikeCollection = await LikesCommentsModel.find({ commentId: { $in: arrayIdComents } });
 
-            //console.log(arrayDocumentsFromLikeCollection)
+        //console.log(arrayDocumentsFromLikeCollection)
 
 
 
@@ -80,4 +78,9 @@ export const commentsQueryRepository = {
             items: arrayComments
         }
     }
+
 }
+
+
+
+export const commentsQueryRepository = new CommentsQueryRepository

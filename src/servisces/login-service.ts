@@ -7,7 +7,8 @@ import {AccessAndRefreshToken, UsersDevices} from "../allTypes/usersDevicesTypes
 import {usersDevicesRepository} from "../repositories/usersDevices/usersDevices-repository";
 
 
-export const loginService = {
+class ClassLoginService {
+
 
     async loginUser(req: RequestWithBody<AuthModel>):Promise<AccessAndRefreshToken|null> {
 
@@ -44,4 +45,7 @@ export const loginService = {
 
         return {accessToken,refreshToken}
     }
+
 }
+
+export const loginService = new ClassLoginService

@@ -7,7 +7,7 @@ import {postsRepository} from "../repositories/posts-repository-mongoDB";
 import {postQueryRepository} from "../repositories/post-query-repository";
 
 
-export const blogsSevrice = {
+class ClassBlogsServise {
 
     async createBlog(requestBodyBlog: CreateAndUpdateBlogModel) {
         const {name, description, websiteUrl} = requestBodyBlog
@@ -34,7 +34,7 @@ export const blogsSevrice = {
         } else {
             return null
         }
-    },
+    }
 
     async createPostFromBlog(createPostModel: CreatePostInputModel, blogId: string) {
 
@@ -68,18 +68,21 @@ export const blogsSevrice = {
         }
         return post
 
-    },
+    }
 
 
     async updateBlog(id: string, requestBodyBlog: CreateAndUpdateBlogModel) {
         return blogsRepository.updateBlog(id, requestBodyBlog)
 
-    },
+    }
 
 
     async deleteBlogById(id: string) {
 
         return blogsRepository.deleteBlogById(id)
     }
+
 }
+
+export const blogsSevrice = new ClassBlogsServise
 

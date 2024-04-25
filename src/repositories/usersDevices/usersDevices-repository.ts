@@ -3,12 +3,12 @@ import {ContentRefreshToken, UsersDevices} from "../../allTypes/usersDevicesType
 import { WithId} from "mongodb";
 
 
-export const usersDevicesRepository = {
+class UsersDevicesRepository {
 
     async createDevice(newDevice: UsersDevices) {
 
         return await usersDevicesModel.create(newDevice)
-    },
+    }
 
 
     async findDeviceByIdAndDate(result: ContentRefreshToken): Promise<WithId<UsersDevices> | null> {
@@ -18,13 +18,13 @@ export const usersDevicesRepository = {
             issuedAt: new Date(result.issuedAtRefreshToken)
         })
         return entity
-    },
+    }
 
     async findDeviceById(deviceId: string): Promise<WithId<UsersDevices> | null> {
 
         const entity = await usersDevicesModel.findOne({deviceId})
         return entity
-    },
+    }
 
 
     async updateDevice(id: string, issuedAtRefreshToken: Date, expirationRefreshToken: Date) {
@@ -35,7 +35,7 @@ export const usersDevicesRepository = {
                 expDate: expirationRefreshToken
             }
         })
-    },
+    }
 
     async deleteDevicesExeptCurrentDevice(userId: string, deviceId: string) {
 
@@ -45,7 +45,7 @@ export const usersDevicesRepository = {
         });
 
         return true
-    },
+    }
 
 
     async deleteDevice(deviceId: string, issuedAt: Date) {
@@ -59,7 +59,7 @@ export const usersDevicesRepository = {
         } else {
             return false
         }
-    },
+    }
 
 
     async deleteDeviceCorrectUser(userId: string, deviceId: string) {
@@ -73,7 +73,9 @@ export const usersDevicesRepository = {
         } else {
             return false
         }
-    },
+    }
 
 
 }
+
+export const usersDevicesRepository = new UsersDevicesRepository

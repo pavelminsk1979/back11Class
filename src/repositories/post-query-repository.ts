@@ -4,7 +4,7 @@ import {postMaper} from "../mapers/postMaper";
 import {ObjectId} from "mongodb";
 
 
-export const postQueryRepository = {
+class PostQueryRepository {
 
     async getPosts(sortDataPost: SortDataPost): Promise<PaginationWithOutputPosts<OutputPost>> {
 
@@ -32,7 +32,7 @@ export const postQueryRepository = {
             items: posts.map(postMaper)
         }
 
-    },
+    }
 
 
     async findPostById(id: string) {
@@ -42,5 +42,7 @@ export const postQueryRepository = {
         } else {
             return null
         }
-    },
+    }
 }
+
+export const postQueryRepository = new PostQueryRepository

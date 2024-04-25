@@ -5,7 +5,8 @@ import {OutputBlog, PaginationWithOutputBlog, SortData} from "../allTypes/blogTy
 import {postMaper} from "../mapers/postMaper";
 
 
-export const blogQueryRepository = {
+class BlogQueryRepository {
+
     async getBlogs(sortData: SortData): Promise<PaginationWithOutputBlog<OutputBlog>> {
         const {searchNameTerm, sortBy, sortDirection, pageNumber, pageSize} = sortData
 
@@ -41,7 +42,7 @@ export const blogQueryRepository = {
             totalCount,
             items: blogs.map(blogMaper)
         }
-    },
+    }
 
 
     async getPostsForCorrectBlog(sortDataGetPostsForBlogs: any, blogId: string) {
@@ -77,7 +78,7 @@ export const blogQueryRepository = {
             items: posts.map(postMaper)
         }
 
-    },
+    }
 
 
     async findBlogById(id: string) {
@@ -87,5 +88,7 @@ export const blogQueryRepository = {
         } else {
             return null
         }
-    },
+    }
 }
+
+export const blogQueryRepository = new BlogQueryRepository

@@ -9,10 +9,7 @@ import {commentsQueryRepository} from "../repositories/comments/comments-query-r
 import {ResultCode} from "../common/object-result";
 
 
-
-
-export const postsSevrice = {
-
+class ClassPostsService {
 
     async createPost(requestBodyPost: CreateAndUpdatePostModel) {
         const {title, shortDescription, content, blogId} = requestBodyPost
@@ -51,20 +48,20 @@ export const postsSevrice = {
             return null
         }
 
-    },
+    }
 
 
     async updatePost(id: string, requestBodyPost: CreateAndUpdatePostModel) {
 
         return postsRepository.updatePost(id, requestBodyPost)
 
-    },
+    }
 
 
     async deletePostById(id: string) {
 
         return postsRepository.deletePostById(id)
-    },
+    }
 
 
     async createCommentForPostByPostId(
@@ -82,7 +79,7 @@ export const postsSevrice = {
             data:null
         }
 
-            //создается структура одного документа-коментария
+        //создается структура одного документа-коментария
         // ее  буду в базу  Коментариев помещать
         const commentatorInfo: CommentatorInfo = {
             userId,
@@ -117,7 +114,7 @@ export const postsSevrice = {
         }
     }
 
-
-
-
 }
+
+
+export const postsSevrice = new ClassPostsService

@@ -6,7 +6,8 @@ import {usersDevicesQueryRepository} from "../repositories/usersDevices/usersDev
 import {ResultCode} from "../common/object-result";
 
 
-export const securityDevicesService = {
+
+class ClassSecurityDevicesService {
 
     async getActiveDevices(refreshToken: string) {
 
@@ -22,7 +23,7 @@ export const securityDevicesService = {
 
 
         return devicesOneUser
-    },
+    }
 
 
     async deleteNotActiveDevices(refreshToken: string) {
@@ -39,7 +40,7 @@ export const securityDevicesService = {
 
 
         return true
-    },
+    }
 
     async deleteDeviceById(deviceId: string, refreshToken: string) {
 
@@ -77,3 +78,5 @@ export const securityDevicesService = {
     }
 
 }
+
+export const securityDevicesService = new ClassSecurityDevicesService

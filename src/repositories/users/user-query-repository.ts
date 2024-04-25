@@ -5,13 +5,14 @@ import {OutputUser, PaginationWithOutputUser, QueryUsersInputModal} from "../../
 import {queryParamsValidationUsers} from "../../middlewares/usersMiddlewares/queryParamsValidationUsers";
 
 
-export const userQueryRepository = {
+
+class UserQueryRepository {
 
     async findUserByLoginOrEmail(loginOrEmail: string) {
 
         const user = await usersModel.findOne({$or: [{login: loginOrEmail}, {email: loginOrEmail}]})
         return user
-    },
+    }
 
 
     async findUserById(id: string): Promise<OutputUser | null> {
@@ -20,7 +21,7 @@ export const userQueryRepository = {
         if (!user) return null
 
         return userMaper(user)
-    },
+    }
 
 
     async getUsers(queryParams: QueryUsersInputModal): Promise<PaginationWithOutputUser<OutputUser>> {
@@ -77,5 +78,7 @@ export const userQueryRepository = {
         }
     }
 }
+
+export const userQueryRepository = new UserQueryRepository
 
 

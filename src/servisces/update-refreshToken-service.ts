@@ -4,7 +4,7 @@ import {usersDevicesRepository} from "../repositories/usersDevices/usersDevices-
 import {WithId} from "mongodb";
 
 
-export const updateRefreshTokenService = {
+class ClassUpdateRefreshTokenService {
 
     async updateRefreshToken(oldRefreshToken:string){
 
@@ -24,13 +24,16 @@ export const updateRefreshTokenService = {
         } = await tokenJwtServise.createRefreshTokenJwt(device.deviceId)
 
 
-         await usersDevicesRepository.updateDevice(device.deviceId,issuedAtRefreshToken,expirationRefreshToken)
+        await usersDevicesRepository.updateDevice(device.deviceId,issuedAtRefreshToken,expirationRefreshToken)
 
         const accessToken = await tokenJwtServise.createAccessTokenJwt(device.userId)
 
         return {accessToken,refreshToken}
     }
+
 }
+
+export const updateRefreshTokenService = new ClassUpdateRefreshTokenService
 
 
 

@@ -37,47 +37,48 @@ const postValidationAuth = () => [loginAndEmailValidationAuth, passwordValidatio
 const postValidationForRegistration = () => [loginValidationUsers, passwordValidationUsers, emailValidationUsers, isExistLoginValidator, isExistEmailValidation]
 
 
-authRoute.post('/login', visitLimitMiddleware, postValidationAuth(), errorValidationBlogs, async (req: RequestWithBody<AuthModel>, res: Response) => {
+class AuthController {
+    async login(req: RequestWithBody<AuthModel>, res: Response) {
+        try {
 
-    try {
+            const result: AccessAndRefreshToken | null = await loginService.loginUser(req)
 
-        const result: AccessAndRefreshToken | null = await loginService.loginUser(req)
+            if (result) {
+                res.cookie('refreshToken', result.refreshToken, {httpOnly: true, secure: true,})
+                res.status(STATUS_CODE.SUCCESS_200).send({"accessToken": result.accessToken})
+            } else {
+                res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+            }
 
-        if (result) {
-            res.cookie('refreshToken', result.refreshToken, {httpOnly: true, secure: true,})
-            res.status(STATUS_CODE.SUCCESS_200).send({"accessToken": result.accessToken})
-        } else {
-            res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+        } catch (error) {
+            console.log('auth-routes.ts /login' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
         }
-
-    } catch (error) {
-        console.log('auth-routes.ts /login' + error)
-        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
-    }
-})
-
-
-authRoute.post('/refresh-token', async (req: any, res: Response) => {
-    try {
-        const refreshToken = req.cookies.refreshToken
-
-        const result = await updateRefreshTokenService.updateRefreshToken(refreshToken)
-
-        if (result) {
-            res.cookie('refreshToken', result.refreshToken, {httpOnly: true, secure: true,})
-            res.status(STATUS_CODE.SUCCESS_200).send({"accessToken": result.accessToken})
-        } else {
-            res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
-        }
-    } catch (error) {
-        console.log('auth-routes.ts /refresh-token' + error)
-        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 
-}),
+
+    async refreshToken(req: any, res: Response) {
+
+        try {
+            const refreshToken = req.cookies.refreshToken
+
+            const result = await updateRefreshTokenService.updateRefreshToken(refreshToken)
+
+            if (result) {
+                res.cookie('refreshToken', result.refreshToken, {httpOnly: true, secure: true,})
+                res.status(STATUS_CODE.SUCCESS_200).send({"accessToken": result.accessToken})
+            } else {
+                res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+            }
+        } catch (error) {
+            console.log('auth-routes.ts /refresh-token' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+        }
+    }
 
 
-    authRoute.get('/me', authTokenMiddleware, async (req: any, res: Response) => {
+    async me(req: any, res: Response) {
+
         try {
 
             const userModel = await userMaperForMeRequest(req.userIdLoginEmail)
@@ -87,78 +88,71 @@ authRoute.post('/refresh-token', async (req: any, res: Response) => {
             console.log(' FIlE auth-routes.ts /me' + error)
             res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
         }
-    })
-
-
-authRoute.post('/registration', visitLimitMiddleware, postValidationForRegistration(), errorValidationBlogs, async (req: RequestWithBody<AuthRegistrationModel>, res: Response) => {
-    try {
-        await authService.registerUser(req.body.login, req.body.email, req.body.password)
-
-        res.sendStatus(STATUS_CODE.NO_CONTENT_204)
-
-    } catch (error) {
-        console.log(' FIlE auth-routes.ts /registration' + error)
-        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
-})
 
+    async registration(req: RequestWithBody<AuthRegistrationModel>, res: Response) {
+        try {
+            await authService.registerUser(req.body.login, req.body.email, req.body.password)
 
-authRoute.post('/registration-confirmation', visitLimitMiddleware, codeConfirmationValidation, errorValidationBlogs, async (req: RequestWithBody<AuthCodeConfirmationModel>, res: Response) => {
-    try {
-        await authService.updateConfirmationCode(req.body.code)
-
-        res.sendStatus(STATUS_CODE.NO_CONTENT_204)
-
-    } catch (error) {
-        console.log(' FIlE auth-routes.ts /registration-confirmation' + error)
-        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
-    }
-})
-
-
-authRoute.post('/registration-email-resending', visitLimitMiddleware, emailValidationUsers, isConfirmedFlagValidation, errorValidationBlogs, async (req: RequestWithBody<AuthEmailModel>, res: Response) => {
-    try {
-        await authService.updateCodeConfirmationAndExpirationDate(req.body.email)
-
-        res.sendStatus(STATUS_CODE.NO_CONTENT_204)
-
-    } catch (error) {
-        console.log(' FIlE auth-routes.ts /registration-email-resending' + error)
-        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
-    }
-})
-
-
-authRoute.post('/logout', async (req: any, res: any) => {
-    try {
-        const refreshToken = req.cookies.refreshToken
-
-        const isLogout = await logoutService.logout(refreshToken)
-
-
-        if (isLogout) {
             res.sendStatus(STATUS_CODE.NO_CONTENT_204)
 
-        } else {
-            res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+        } catch (error) {
+            console.log(' FIlE auth-routes.ts /registration' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
         }
-
-
-    } catch (error) {
-        console.log('auth-routes.ts /logout' + error)
-        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 
-})
+    async registrationConfirmation(req: RequestWithBody<AuthCodeConfirmationModel>, res: Response){
+        try {
+            await authService.updateConfirmationCode(req.body.code)
+
+            res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+
+        } catch (error) {
+            console.log(' FIlE auth-routes.ts /registration-confirmation' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+        }
+    }
 
 
-/*Востановление пароля через подтверждение по электронной почте.
-    Электронное письмо должно быть отправлено С КОДОМ ВОСТАНОВЛЕНИЯ ВНУТРИ*/
-authRoute.post('/password-recovery', visitLimitMiddleware,
-    emailValidationUsers, errorValidationBlogs, async (req: RequestWithBody<AuthEmailModel>, res: Response) => {
+    async registrationEmailResending(req: RequestWithBody<AuthEmailModel>, res: Response) {
 
         try {
-          await authService.sendEmailForRecoveryPassword(req.body.email)
+            await authService.updateCodeConfirmationAndExpirationDate(req.body.email)
+
+            res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+
+        } catch (error) {
+            console.log(' FIlE auth-routes.ts /registration-email-resending' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+        }
+    }
+
+    async logout(req: any, res: any){
+        try {
+            const refreshToken = req.cookies.refreshToken
+
+            const isLogout = await logoutService.logout(refreshToken)
+
+
+            if (isLogout) {
+                res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+
+            } else {
+                res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+            }
+
+
+        } catch (error) {
+            console.log('auth-routes.ts /logout' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+        }
+    }
+
+    async passwordRecovery(req: RequestWithBody<AuthEmailModel>, res: Response){
+
+        try {
+            await authService.sendEmailForRecoveryPassword(req.body.email)
 
             res.sendStatus(STATUS_CODE.NO_CONTENT_204)
 
@@ -166,26 +160,78 @@ authRoute.post('/password-recovery', visitLimitMiddleware,
             console.log('auth-routes.ts /password-recovery' + error)
             res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
         }
+    }
 
-    })
+    async newPassword(req: RequestWithBody<NewPasswordModel>, res: Response){
+        try {
+            await authService.recoveryNewPassword(req.body.newPassword, req.body.recoveryCode)
+            //ecли КОД валидный И НОВЫЙ ПАРОЛЬ установлен в базу данных
+            res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+
+        } catch (error) {
+            console.log('auth-routes.ts /password-recovery' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+        }
+    }
+}
+
+
+const authController = new AuthController()
+
+
+authRoute.post('/login',
+    visitLimitMiddleware,
+    postValidationAuth(),
+    errorValidationBlogs,
+    authController.login)
+
+authRoute.post('/refresh-token',
+    authController.refreshToken)
+
+authRoute.get('/me',
+    authTokenMiddleware,
+    authController.me)
+
+authRoute.post('/registration',
+    visitLimitMiddleware,
+    postValidationForRegistration(),
+    errorValidationBlogs,
+    authController.registration)
+
+authRoute.post('/registration-confirmation',
+    visitLimitMiddleware,
+    codeConfirmationValidation,
+    errorValidationBlogs,
+    authController.registrationConfirmation)
+
+authRoute.post('/registration-email-resending',
+    visitLimitMiddleware,
+    emailValidationUsers,
+    isConfirmedFlagValidation,
+    errorValidationBlogs,
+    authController.registrationEmailResending)
+
+authRoute.post('/logout',
+    authController.logout)
+
+
+/*Востановление пароля через подтверждение по электронной почте.
+    Электронное письмо должно быть отправлено С КОДОМ ВОСТАНОВЛЕНИЯ ВНУТРИ*/
+authRoute.post('/password-recovery',
+    visitLimitMiddleware,
+    emailValidationUsers,
+    errorValidationBlogs,
+    authController.passwordRecovery)
 
 
 /*Подтверждение и Восстановление (recovery) нового пароля и в базу данных помещаю
 ХЭШНОВОГОПАРОЛЯ(passwordHash).  В теле запроса приходит КОД и новый пароль
 который на фронте условный пользователь создал*/
-authRoute.post('/new-password', visitLimitMiddleware,
-    newPasswordValidation,recoveryCodeConfirmationValidation, errorValidationBlogs, async (req: RequestWithBody<NewPasswordModel>, res: Response) => {
-        //Confirm Password recovery
-        try {
-            await authService.recoveryNewPassword(req.body.newPassword,req.body.recoveryCode)
-                //ecли КОД валидный И НОВЫЙ ПАРОЛЬ установлен в базу данных
-            res.sendStatus(STATUS_CODE.NO_CONTENT_204)
-
-        } catch (error) {
-            console.log('auth-routes.ts /password-recovery' + error)
-            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
-        }
-
-    })
+authRoute.post('/new-password',
+    visitLimitMiddleware,
+    newPasswordValidation,
+    recoveryCodeConfirmationValidation,
+    errorValidationBlogs,
+    authController.newPassword)
 
 

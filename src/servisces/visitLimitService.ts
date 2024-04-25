@@ -2,7 +2,8 @@ import {visitsRepository} from "../repositories/visits-repository";
 import {Visit, VisitWithIdMongodb} from "../allTypes/visitTypes";
 
 
-export const visitLimitService = {
+class ClassVisitLimitService {
+
     async checkLimitVisits(IP: string, URL: string, date: Date) {
         const newVisit: Visit = { IP, URL, date };
         await visitsRepository.createVisit(newVisit);
@@ -19,6 +20,9 @@ export const visitLimitService = {
         if (visitsForTimeInterval.length > maxRequests) return true;
 
         return false;
-    },
-};
+    }
+
+}
+
+export const visitLimitService = new ClassVisitLimitService
 

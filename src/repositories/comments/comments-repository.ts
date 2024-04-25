@@ -2,12 +2,13 @@ import {Comment} from "../../allTypes/commentTypes";
 import { commentsModel} from "../../db/mongoDb";
 import {ObjectId} from "mongodb";
 
-export const commentsRepository = {
+
+class CommentsRepository {
 
     async createComment(newComment: Comment) {
 
         return commentsModel.create(newComment)
-    },
+    }
 
     async deleteComentById(id:string){
 
@@ -15,7 +16,7 @@ export const commentsRepository = {
 
         return !!result.deletedCount
 
-    },
+    }
 
     async updateComment(commentId:string,content:string){
 
@@ -27,3 +28,5 @@ export const commentsRepository = {
     }
 
 }
+
+export const commentsRepository = new CommentsRepository

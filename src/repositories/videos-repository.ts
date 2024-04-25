@@ -4,16 +4,18 @@ import {DB} from "../db/db";
 import {Video} from "../allTypes/videoTypes";
 
 
-export const videosRepository = {
+class VideosRepository {
+
+
     getVideos() {
         return DB.videos
-    },
+    }
 
 
     findVideoById(id: number) {
         let video = DB.videos.find(e => e.id === id)
         return video
-    },
+    }
 
 
     deletVideoById(id: number) {
@@ -24,7 +26,7 @@ export const videosRepository = {
             }
         }
         return false
-    },
+    }
 
     createVideo(requestBody: CreateVideo) {
         let {title, author, availableResolutions} = requestBody
@@ -45,7 +47,7 @@ export const videosRepository = {
 
         DB.videos.push(newVideo)
         return newVideo
-    },
+    }
 
     updateVideo(id:number,requestBody:UpdateVideoModel){
         let {title, author, availableResolutions, minAgeRestriction, canBeDownloaded, publicationDate} = requestBody
@@ -74,3 +76,5 @@ export const videosRepository = {
         }
     }
 }
+
+export const videosRepository = new VideosRepository

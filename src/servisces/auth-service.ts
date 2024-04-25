@@ -10,7 +10,8 @@ import {emailLetterForRegistration} from "../common/email_letter/email_letter_fo
 import {emailLetterForRecoveryPassword} from "../common/email_letter/email_letter_for_recovery_password";
 
 
-export const authService = {
+
+ class ClassAuthService {
 
     async registerUser(login: string, email: string, password: string) {
 
@@ -41,7 +42,7 @@ export const authService = {
         }
 
         return newUser
-    },
+    }
 
 
     async findUserInDataBase(requestBody: AuthModel) {
@@ -60,12 +61,12 @@ export const authService = {
         if (!isCorrectPasword) return null
 
         return user._id.toString()
-    },
+    }
 
 
     async updateConfirmationCode(code: string) {
         return await usersRepository.updateFlagIsConfirmedForUser(code)
-    },
+    }
 
 
     async updateCodeConfirmationAndExpirationDate(email: string) {
@@ -82,7 +83,7 @@ export const authService = {
         }
 
         return true
-    },
+    }
 
 
     async checkAccessToken(header: string) {
@@ -99,7 +100,7 @@ export const authService = {
         if (!user) return false
 
         return user
-    },
+    }
 
 
     /*Востановление пароля через подтверждение по электронной почте.
@@ -119,7 +120,7 @@ export const authService = {
         } catch (error) {
             console.log(' FIlE auth-service.ts  sendEmailForRecoveryPassword' + error)
         }
-    },
+    }
 
     //новый пароль (passwordHash) в базу данных помещаю
     async recoveryNewPassword(newPassword:string,code:string){
@@ -132,3 +133,6 @@ export const authService = {
 
 
 }
+
+
+export const authService = new ClassAuthService()
