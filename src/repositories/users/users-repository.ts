@@ -3,7 +3,7 @@ import {User} from "../../allTypes/userTypes";
 import {ObjectId} from "mongodb";
 
 
-class UsersRepository {
+ export class UsersRepository {
 
 
     async createUser(newUser: User) {

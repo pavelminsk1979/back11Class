@@ -1,11 +1,18 @@
 import {CreateUserModel, OutputUser} from "../allTypes/userTypes";
-import {usersRepository} from "../repositories/users/users-repository";
 import {userQueryRepository} from "../repositories/users/user-query-repository";
 import {hashPasswordService} from "./hash-password-service";
 import {v4 as randomCode} from "uuid";
+import {UsersRepository} from "../repositories/users/users-repository";
 
 
-class ClassUserService {
+export class UserService {
+
+
+    usersRepository:UsersRepository
+    constructor() {
+        this.usersRepository=new UsersRepository()
+        console.log(this.usersRepository)
+    }
 
     async createUser(requestBodyUser: CreateUserModel):Promise<OutputUser|null> {
 
@@ -27,7 +34,7 @@ class ClassUserService {
             blackListRefreshToken:[]
         }
 
-        const result= await usersRepository.createUser(newUser)
+        const result= await this.usersRepository.createUser(newUser)
 
         // const idNewUser = result.insertedId.toString()
 
@@ -43,12 +50,12 @@ class ClassUserService {
     }
 
     async deleteUserById(id:string):Promise<boolean>{
-        return usersRepository.deleteUserById(id)
+        return this.usersRepository.deleteUserById(id)
     }
 
 }
 
-export const usersService = new ClassUserService()
+//export const usersService = new UserService()
 
 
 

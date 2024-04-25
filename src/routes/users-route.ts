@@ -6,11 +6,12 @@ import {loginValidationUsers} from "../middlewares/usersMiddlewares/loginValidat
 import {passwordValidationUsers} from "../middlewares/usersMiddlewares/passwordValidationUsers";
 import {emailValidationUsers} from "../middlewares/usersMiddlewares/emailValidationUsers";
 import {errorValidationBlogs} from "../middlewares/blogsMiddelwares/errorValidationBlogs";
-import {usersService} from "../servisces/users-service";
+
 import {STATUS_CODE} from "../common/constant-status-code";
 import {RequestWithQuery} from "../allTypes/RequestWithQuery";
 import {userQueryRepository} from "../repositories/users/user-query-repository";
 import {RequestWithParams} from "../allTypes/RequestWithParams";
+import {UserService} from "../servisces/users-service";
 
 
 export const usersRoute = Router({})
@@ -19,6 +20,11 @@ const postValidationUsers = () => [loginValidationUsers, passwordValidationUsers
 
 
 class UsersController {
+
+    usersService:UserService
+    constructor() {
+        this.usersService=new UserService()
+    }
 
     async getUsers(req: RequestWithQuery<QueryUsersInputModal>, res: Response) {
         const users = await userQueryRepository.getUsers(req.query)
@@ -29,7 +35,7 @@ class UsersController {
     async createUser(req: RequestWithBody<CreateUserModel>, res: Response) {
         try {
 
-            const newUser = await usersService.createUser(req.body)
+            const newUser = await this.usersService.createUser(req.body)
 
             if (newUser) {
 
@@ -45,7 +51,7 @@ class UsersController {
     }
 
     async deleteCorrectUser(req: RequestWithParams<IdUserModel>, res: Response) {
-        const isUserDelete = await usersService.deleteUserById(req.params.id)
+        const isUserDelete = await this.usersService.deleteUserById(req.params.id)
 
         if (isUserDelete) {
             return res.sendStatus(STATUS_CODE.NO_CONTENT_204)
@@ -60,15 +66,15 @@ const usersController = new UsersController()
 
 usersRoute.get('/',
     authMiddleware,
-    usersController.getUsers)
+    usersController.getUsers.bind(usersController))
 
 
 usersRoute.post('/',
     authMiddleware,
     postValidationUsers(),
     errorValidationBlogs,
-    usersController.createUser)
+    usersController.createUser.bind(usersController))
 
 usersRoute.delete('/:id',
     authMiddleware,
-    usersController.deleteCorrectUser)
+    usersController.deleteCorrectUser.bind(usersController))
