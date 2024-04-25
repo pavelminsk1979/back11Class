@@ -8,79 +8,89 @@ import {ResultCode} from "../common/object-result";
 
 export const securityDevicesRoute = Router({})
 
-securityDevicesRoute.get('/devices', async (req: Request, res: Response) => {
-    try {
+class SecurityDevicesController {
 
-        const refreshToken = req.cookies.refreshToken
+    async getDevices(req: Request, res: Response) {
+        try {
 
-        const devices = await securityDevicesService.getActiveDevices(refreshToken)
+            const refreshToken = req.cookies.refreshToken
 
-        if (devices) {
+            const devices = await securityDevicesService.getActiveDevices(refreshToken)
 
-            res.status(STATUS_CODE.SUCCESS_200).send(devices)
+            if (devices) {
 
-        } else {
-            res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+                res.status(STATUS_CODE.SUCCESS_200).send(devices)
+
+            } else {
+                res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+            }
+
+        } catch (error) {
+            console.log('securityDevices-route.ts /devices' + error)
+            res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
         }
-
-    } catch (error) {
-        console.log('securityDevices-route.ts /devices' + error)
-        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 
-})
+    async deleteDevices(req: Request, res: Response) {
+        try {
 
+            const refreshToken = req.cookies.refreshToken
 
-securityDevicesRoute.delete('/devices', async (req: Request, res: Response) => {
-    try {
+            const isDelete = await securityDevicesService.deleteNotActiveDevices(refreshToken)
 
-        const refreshToken = req.cookies.refreshToken
+            if (isDelete) {
 
-        const isDelete = await securityDevicesService.deleteNotActiveDevices(refreshToken)
+                return res.sendStatus(STATUS_CODE.NO_CONTENT_204)
 
-        if (isDelete) {
+            } else {
+                return res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+            }
 
-            return res.sendStatus(STATUS_CODE.NO_CONTENT_204)
-
-        } else {
-            return res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+        } catch (error) {
+            console.log('securityDevices-route.ts delete /devices' + error)
+            return res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
         }
-
-    } catch (error) {
-        console.log('securityDevices-route.ts delete /devices' + error)
-        return res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 
-})
+    async deleteCorrectDevice(req: RequestWithParams<IdDeviceModel>, res: Response) {
+        try {
+
+            const refreshToken = req.cookies.refreshToken
+
+            const resultObject = await securityDevicesService.deleteDeviceById(req.params.deviceId, refreshToken)
 
 
-securityDevicesRoute.delete('/devices/:deviceId', async (req: RequestWithParams<IdDeviceModel>, res: Response) => {
+            if (resultObject.code === ResultCode.Success) {
+                return res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+            }
 
-    try {
+            if (resultObject.code === ResultCode.NotFound) {
+                return res.sendStatus(STATUS_CODE.FORBIDDEN_403)
+            }
+            if (resultObject.code === ResultCode.Incorrect) {
+                return res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
+            }
+            if (resultObject.code === ResultCode.Failure) {
+                return res.sendStatus(STATUS_CODE.NOT_FOUND_404)
+            }
+            return
 
-        const refreshToken = req.cookies.refreshToken
-
-        const resultObject = await securityDevicesService.deleteDeviceById(req.params.deviceId, refreshToken)
-
-
-        if (resultObject.code === ResultCode.Success) {
-            return res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+        } catch (error) {
+            console.log('securityDevices-route.ts delete /devices' + error)
+            return res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
         }
-
-        if (resultObject.code === ResultCode.NotFound) {
-            return res.sendStatus(STATUS_CODE.FORBIDDEN_403)
-        }
-        if (resultObject.code === ResultCode.Incorrect) {
-            return res.sendStatus(STATUS_CODE.UNAUTHORIZED_401)
-        }
-        if (resultObject.code === ResultCode.Failure) {
-            return res.sendStatus(STATUS_CODE.NOT_FOUND_404)
-        }
-        return
-
-    } catch (error) {
-        console.log('securityDevices-route.ts delete /devices' + error)
-        return res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
+}
 
-})
+
+const securityDevicesController = new SecurityDevicesController()
+
+
+securityDevicesRoute.get('/devices',
+    securityDevicesController.getDevices)
+
+securityDevicesRoute.delete('/devices',
+    securityDevicesController.deleteDevices)
+
+securityDevicesRoute.delete('/devices/:deviceId',
+    securityDevicesController.deleteCorrectDevice)
