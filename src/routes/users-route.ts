@@ -12,6 +12,7 @@ import {RequestWithQuery} from "../allTypes/RequestWithQuery";
 import {userQueryRepository} from "../repositories/users/user-query-repository";
 import {RequestWithParams} from "../allTypes/RequestWithParams";
 import {UserService} from "../servisces/users-service";
+import {usersController} from "../composition-root";
 
 
 export const usersRoute = Router({})
@@ -19,12 +20,16 @@ export const usersRoute = Router({})
 const postValidationUsers = () => [loginValidationUsers, passwordValidationUsers, emailValidationUsers]
 
 
-class UsersController {
+export class UsersController {
 
-    usersService:UserService
-    constructor() {
-        this.usersService=new UserService()
-    }
+  /*  usersService:UserService
+    constructor(usersService:UserService) {
+        this.usersService=usersService
+
+        НИЖЕ сокращенный синтаксис
+и одно заменяет другое
+    }*/
+    constructor(protected usersService:UserService) { }
 
     async getUsers(req: RequestWithQuery<QueryUsersInputModal>, res: Response) {
         const users = await userQueryRepository.getUsers(req.query)
@@ -61,7 +66,7 @@ class UsersController {
     }
 }
 
-const usersController = new UsersController()
+//const usersController = new UsersController(usersService)
 
 
 usersRoute.get('/',

@@ -8,11 +8,16 @@ import {UsersRepository} from "../repositories/users/users-repository";
 export class UserService {
 
 
-    usersRepository:UsersRepository
-    constructor() {
-        this.usersRepository=new UsersRepository()
-        console.log(this.usersRepository)
-    }
+ /*   usersRepository:UsersRepository
+    constructor(usersRepository:UsersRepository) {
+        this.usersRepository=usersRepository
+
+  НИЖЕ сокращенный синтаксис
+и одно заменяет другое
+    }*/
+
+
+    constructor( protected  usersRepository:UsersRepository) {    }
 
     async createUser(requestBodyUser: CreateUserModel):Promise<OutputUser|null> {
 
@@ -55,7 +60,7 @@ export class UserService {
 
 }
 
-//export const usersService = new UserService()
+
 
 
 
