@@ -4,7 +4,7 @@ import {hashPasswordService} from "./hash-password-service";
 import {v4 as randomCode} from "uuid";
 import {UsersRepository} from "../repositories/users/users-repository";
 import {injectable} from "inversify";
-import "reflect-metadata"
+
 
 
 @injectable()

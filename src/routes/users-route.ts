@@ -6,7 +6,7 @@ import {emailValidationUsers} from "../middlewares/usersMiddlewares/emailValidat
 import {errorValidationBlogs} from "../middlewares/blogsMiddelwares/errorValidationBlogs";
 import {container} from "../composition-root";
 import {UsersController} from "../controllers/user-controller";
-import "reflect-metadata"
+
 
 
 

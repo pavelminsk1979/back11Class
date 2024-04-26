@@ -1,4 +1,3 @@
-
 import {UserService} from "../servisces/users-service";
 import {RequestWithQuery} from "../allTypes/RequestWithQuery";
 import {CreateUserModel, IdUserModel, QueryUsersInputModal} from "../allTypes/userTypes";
@@ -7,8 +6,8 @@ import {userQueryRepository} from "../repositories/users/user-query-repository";
 import {STATUS_CODE} from "../common/constant-status-code";
 import {RequestWithBody} from "../allTypes/RequestWithBody";
 import {RequestWithParams} from "../allTypes/RequestWithParams";
-import {injectable} from "inversify";
-import "reflect-metadata"
+import {inject, injectable} from "inversify";
+
 
 
 @injectable()
@@ -21,7 +20,7 @@ export class UsersController {
           НИЖЕ сокращенный синтаксис
   и одно заменяет другое
       }*/
-    constructor(protected usersService:UserService) { }
+    constructor( protected usersService:UserService) { }
 
     async getUsers(req: RequestWithQuery<QueryUsersInputModal>, res: Response) {
         const users = await userQueryRepository.getUsers(req.query)
