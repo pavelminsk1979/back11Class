@@ -1,8 +1,11 @@
 import {usersModel} from "../../db/mongoDb";
 import {User} from "../../allTypes/userTypes";
 import {ObjectId} from "mongodb";
+import {injectable} from "inversify";
+import "reflect-metadata"
 
 
+@injectable()
  export class UsersRepository {
 
 
