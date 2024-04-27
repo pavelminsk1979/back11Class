@@ -11,6 +11,7 @@ import { injectable} from "inversify";
 
 
 @injectable()
+    //декоратор-это сущность которая добавляет классу метаданные
 export class UsersController {
 
     /*  usersService:UserService
