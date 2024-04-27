@@ -38,6 +38,7 @@ const postValidationForRegistration = () => [loginValidationUsers, passwordValid
 
 
 class AuthController {
+
     async login(req: RequestWithBody<AuthModel>, res: Response) {
         try {
 

@@ -6,7 +6,7 @@ import {userQueryRepository} from "../repositories/users/user-query-repository";
 import {STATUS_CODE} from "../common/constant-status-code";
 import {RequestWithBody} from "../allTypes/RequestWithBody";
 import {RequestWithParams} from "../allTypes/RequestWithParams";
-import {inject, injectable} from "inversify";
+import { injectable} from "inversify";
 
 
 
