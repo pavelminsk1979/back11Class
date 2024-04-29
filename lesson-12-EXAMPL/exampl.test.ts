@@ -133,10 +133,13 @@ describe('some',()=>{
 
         wallet1.addMoney(100)
         const func = ()=> wallet2.addMoney(-100)
+        wallet2.addMoney(10)
 
 
         expect(wallet1.balance).toBe(100)
         expect(func).toThrowError()
+        expect(user1.totalBalance).toBe(110)
+
     })
 
 })

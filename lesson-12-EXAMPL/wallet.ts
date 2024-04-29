@@ -70,6 +70,8 @@ export class Wallet {
     addMoney(sum:number){
         if(sum<0){  throw new Error('Error money little')}
         this.balance+=sum
+        this.owner.totalBalance+=sum
+        //это тоже самое что user1.totalBalance
 
     }
 

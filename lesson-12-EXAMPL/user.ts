@@ -89,7 +89,7 @@ user.ts
 wallet.ts*/
 
 
-
+//тут добавился общий баланс всех кошельков юзера
 import {Wallet} from "./wallet";
 
 
@@ -97,10 +97,8 @@ import {Wallet} from "./wallet";
 export class User1 {
 
     public wallets :Wallet[]=[]
+    public totalBalance :number =0
 
-    constructor() {
-
-    }
 
     createWallet(){
 //в this попадёт( смотрю
