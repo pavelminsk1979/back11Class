@@ -13,6 +13,7 @@ import {UsersController} from "../controllers/user-controller";
 /*const usersController = ioc.getInstans<UsersController>(UsersController)*/
 
 
+//--получаю обьект конкретного класса
 const usersController = container.resolve(UsersController)
 
 export const usersRoute = Router({})

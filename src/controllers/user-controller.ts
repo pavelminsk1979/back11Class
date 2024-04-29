@@ -6,12 +6,13 @@ import {userQueryRepository} from "../repositories/users/user-query-repository";
 import {STATUS_CODE} from "../common/constant-status-code";
 import {RequestWithBody} from "../allTypes/RequestWithBody";
 import {RequestWithParams} from "../allTypes/RequestWithParams";
-import { injectable} from "inversify";
+import {inject, injectable} from "inversify";
 
 
 
 @injectable()
     //декоратор-это сущность которая добавляет классу метаданные
+// это для INVERSIFY -ФРЕЙМВОРК
 export class UsersController {
 
     /*  usersService:UserService
