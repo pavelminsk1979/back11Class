@@ -10,7 +10,16 @@ import {UsersController} from "../controllers/user-controller";
 
 
 
-/*const usersController = ioc.getInstans<UsersController>(UsersController)*/
+/*
+ ИСПОЛЬЗОВАНИЕ ioc контейнера
+
+const usersController = ioc.getInstans<UsersController>(UsersController)
+
+!!!ВАЖНО ТОЛЬКО В ОДНОМ МЕСТЕ В ПРиЛОЖЕНИИ
+    ПРОПИСАТЬ  ioc.getInstans   А ДАЛЕЕ ВЕЗДЕ В
+    ПРОЛОЖЕНИИ ИСПОЛЬЗОВАТЬ   ОБЬЕКТ  userController
+
+*/
 
 
 //--получаю обьект конкретного класса

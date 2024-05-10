@@ -43,7 +43,7 @@ export const ioc={
     const userController = ioc.getInstans(UserController)
 
 
-    !!!ВАЖНО ТОЛЬКО В ОДНОМ МЕСТЕ В ПРОЛОЖЕНИИ
+    !!!ВАЖНО ТОЛЬКО В ОДНОМ МЕСТЕ В ПРиЛОЖЕНИИ
     ПРОПИСАТЬ  ioc.getInstans   А ДАЛЕЕ ВЕЗДЕ В
     ПРОЛОЖЕНИИ ИСПОЛЬЗОВАТЬ   ОБЬЕКТ  userController
 }*/
@@ -59,7 +59,7 @@ export const ioc={
 /*
 INVERSIFY -ФРЕЙМВОРК  ПОМОЖЕТ И СОЗДАВАТЬ ЗАВИСИМОСТИ
 И ПОДСТАВЛЯТЬ РАЗЛИЧНЫЕ ЗАВИСИМОСТ
-
+IOC контэйнер будет создан этим фреймворком
 
 
 yarn add inversify@5.0.5 reflect-metadata
@@ -69,6 +69,7 @@ yarn add inversify@5.0.5 reflect-metadata
 
 в файле  tsconfig.json  раскоментирую
 примерно  18 строка
+это чтоб декораторы работали
 "experimentalDecorators": true,
     "emitDecoratorMetadata": true,*/
 
@@ -77,7 +78,7 @@ yarn add inversify@5.0.5 reflect-metadata
 
 /*https://github.com/inversify/inversifyJS/tree/master/wiki
 
-    тут рассматривал расделы
+    тут рассматривал разделы
 --------    INSTALATION
 ---Vanilla JavaScript example
 ---Support for classes*/
@@ -87,7 +88,10 @@ yarn add inversify@5.0.5 reflect-metadata
 
 
 
-/*Здесь создается новый экземпляр класса Container из библиотеки InversifyJS. Контейнер служит для регистрации и разрешения зависимостей в приложении.*/
+/*Здесь создается новый экземпляр класса Container из библиотеки InversifyJS. Контейнер служит для регистрации и разрешения зависимостей в приложении. В НЕМ БУДЕТ ОПРЕДЕЛЯТСЯ
+* КАКИЕ ЗАВИСИМОСТИ КОМУ ПОДСТАВЛЯТЬ//// хотя в конце урока
+* и я написал это в самом низу конспекта КАК ПРОПИСЫВАЕТСЯ
+* декоратор с помощью которого определяется зависимость */
 export const container = new Container();
 
 /*использование  container   в одном месте в приложении
@@ -100,10 +104,21 @@ const usersController = container.resolve(UsersController)
 
 container.bind<UsersController>(UsersController).to(UsersController);
 /*-
+
+
+---<UsersController>  это типизация
+
+container.bind<UsersController>(UsersController)  в этом коде такой
+смысл--если понадобится UsersController тогда следующая часть
+---   .to(UsersController)   тогда создай обьект  UsersController
+
 В этой строке происходит регистрация класса UsersController в контейнере container.
 
 в Nest  это будет рассмотрено
 
+
+используется контэйнер в файле user.routes.ts
+const usersController = container.resolve(UsersController)
 --*/
 
 
@@ -121,10 +136,12 @@ container.bind<UsersRepository>(UsersRepository).to(UsersRepository);
  это для INVERSIFY -ФРЕЙМВОРК    добавить к классам всем в цепочке
   class UsersController          class UserService
   class UsersRepository
+
+
+  также в этом файле и в файлах где классы надо закинуть
+  на первую строку в коде
+  import "reflect-metadata"
  */
-
-
-
 
 
 
@@ -151,4 +168,19 @@ container.bind<ХХХ>(ХХХ).to(ХХХ);
 export class UserService {
 
     constructor( protected  usersRepository:UsersRepository,
-                 protected ХХХ:ХХХ)*/
+                 protected ХХХ:ХХХ)
+
+  БИБЛИОТЕКА САМА ОПРЕДЕЛЯЕТ ЗАВИСИМОСТИ ДЛЯ КЛАССОВ
+  БЛАГОДОРЯ ДЕКОРАТОРАМ
+
+
+
+
+      КАК ПРОПИСЫВАЕТСЯ
+* декоратор с помощью которого определяется зависимость
+--НО У МЕНЯ РАБОТАЕТ И БЕЗ НЕГО А С НИМ
+ОШИБКА ПАДАЕТ---ВОБЩЕМ ТИПО И НЕНАДО ДЕКАРАТОР ТУТ
+ДЛЯ ДАННОЙ БИБЛИОТЕКИ
+       export class UsersController {
+        constructor(@inject(UserService) protected usersService:UserService) { }
+                 */
